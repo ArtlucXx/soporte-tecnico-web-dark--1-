@@ -22,10 +22,10 @@ const buckets = new Map<string, Bucket>();
 // Periodically drop old entries so this Map can't grow forever.
 setInterval(() => {
   const now = Date.now();
-  for (const [key, bucket] of buckets) {
+  buckets.forEach((bucket, key) => {
     if (bucket.resetAt < now) buckets.delete(key);
-  }
-}, 5 * 60 * 1000).unref?.();
+  });
+}, 5 * 60 * 1000);
 
 export function getClientIp(req: NextRequest): string {
   const forwarded = req.headers.get("x-forwarded-for");
