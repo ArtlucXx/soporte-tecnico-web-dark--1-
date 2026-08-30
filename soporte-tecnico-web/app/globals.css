@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+
+:root {
+  --bg: #06060a;
+  --line: rgba(255,255,255,0.14);
+  --line-soft: rgba(255,255,255,0.07);
+  --glow-sm: 0 0 6px rgba(255,255,255,.65), 0 0 1px rgba(255,255,255,.9);
+  --glow-md: 0 0 18px rgba(255,255,255,.35), 0 0 2px rgba(255,255,255,.8);
+}
+
+body {
+  font-family: var(--font-geist-sans), "Segoe UI", Arial, Helvetica, sans-serif;
+  color: #f4f4f5;
+  background: var(--bg);
+}
+
+/* Faint blueprint grid used as an ambient backdrop */
+.grid-lines {
+  background-image:
+    linear-gradient(var(--line-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+/* Glowing hairline divider / rule */
+.glow-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.75), transparent);
+  box-shadow: var(--glow-md);
+}
+.glow-rule-v {
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,.75), transparent);
+  box-shadow: var(--glow-md);
+}
+
+/* Glowing outline used on frames, cards, inputs on focus */
+.glow-edge { box-shadow: var(--glow-sm); }
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  will-change: opacity, transform;
+}
+.reveal-up    { transform: translateY(24px); }
+.reveal-left  { transform: translateX(-24px); }
+.reveal-right { transform: translateX(24px); }
+.reveal-zoom  { transform: scale(0.96); }
+.reveal.reveal-visible { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* Underline hover nav */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 2px;
+  background: #ffffff;
+  box-shadow: var(--glow-sm);
+  transition: width 0.25s ease;
+}
+.nav-link:hover::after { width: 100%; }
+
+/* Service card image zoom */
+.img-zoom img {
+  transition: transform 0.5s ease;
+}
+.img-zoom:hover img { transform: scale(1.04); }
+
+/* ── Service photo accents ─────────────────────────── */
+
+/* Storage: bar fills from almost-full to mostly-empty */
+@keyframes storage-fill { 0%,42%{ width:88% } 58%,100%{ width:26% } }
+.acc-storage-fill { animation: storage-fill 5s ease-in-out infinite; }
+
+/* Shared chip crossfade used by storage / shield / speed accents */
+@keyframes chip-a { 0%,42%{ opacity:1 } 50%,100%{ opacity:0 } }
+@keyframes chip-b { 0%,42%{ opacity:0 } 50%,100%{ opacity:1 } }
+.acc-chip-a { animation: chip-a 5s ease-in-out infinite; }
+.acc-chip-b { animation: chip-b 5s ease-in-out infinite; }
+
+/* Shield: scanning sweep + pulsing badge */
+@keyframes scan-sweep { 0%{ transform: translateY(-20%);} 100%{ transform: translateY(320%);} }
+.acc-scan { animation: scan-sweep 2.6s linear infinite; }
+@keyframes pulse-slow { 0%,100%{ transform: scale(1); opacity:.9 } 50%{ transform: scale(1.12); opacity:1 } }
+.acc-pulse { animation: pulse-slow 2.2s ease-in-out infinite; }
+
+/* Speed: gauge arc draws in, needle sweeps low → high */
+@keyframes gauge-arc { 0%{ stroke-dashoffset:132 } 45%,100%{ stroke-dashoffset:14 } }
+.acc-gauge-arc { animation: gauge-arc 5s ease-in-out infinite; }
+@keyframes needle-sweep { 0%,10%{ transform: rotate(-58deg) } 55%,100%{ transform: rotate(52deg) } }
+.acc-needle { animation: needle-sweep 5s ease-in-out infinite; }
+
+/* Install: checklist rows appear one after another, then reset */
+@keyframes step-in {
+  0%, 100% { opacity:0; transform: translateX(-6px); }
+  8%, 78%  { opacity:1; transform: translateX(0); }
+  86%      { opacity:0; transform: translateX(-6px); }
+}
+.acc-step1 { animation: step-in 4.5s ease-in-out infinite; animation-delay: 0s; }
+.acc-step2 { animation: step-in 4.5s ease-in-out infinite; animation-delay: .45s; }
+.acc-step3 { animation: step-in 4.5s ease-in-out infinite; animation-delay: .9s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .acc-storage-fill, .acc-chip-a, .acc-chip-b, .acc-scan, .acc-pulse,
+  .acc-gauge-arc, .acc-needle, .acc-step1, .acc-step2, .acc-step3 { animation: none; }
+}
